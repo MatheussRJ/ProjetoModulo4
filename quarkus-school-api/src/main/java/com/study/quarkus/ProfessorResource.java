@@ -1,5 +1,6 @@
 package com.study.quarkus;
 
+import javax.annotation.processing.Generated;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,6 +14,14 @@ import org.slf4j.LoggerFactory;
 public class ProfessorResource {
 
     private static final Logger log = LoggerFactory.getLogger(ProfessorResource.class);
+
+    //trecho para teste simples
+    /* @GET 
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(){
+        log.info("Testando Endpoint...");
+        return "Hello RestEasy!";
+    } */
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
