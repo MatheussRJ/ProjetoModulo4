@@ -10,6 +10,15 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//
+/* import com.study.quarkus.dto.ProfessorDto;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response; */
+
+@slf4j
 @Path("/professor")
 public class ProfessorResource {
 
@@ -24,56 +33,41 @@ public class ProfessorResource {
     } */
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response listaAlunos() {
-        log.info("Listando todos os alunos");
-        return Response
-                .ok()
-                .status(Response.Status.OK)
-                .build();
+    public Response listProfessors() {
+        log.info("Listing professors");
+        return Response.ok().build();
     }
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response buscaAlunoPorId(@PathParam ("id") int id) {
-        log.info("Busca aluno por id");
-        return Response
-                .ok()
-                .status(Response.Status.OK)
-                .build();
+    public Response getProfessor(@PathParam("id") int id) {
+        log.info("Getting professor id-{}", id);
+        return Response.ok().build();
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response salvarAluno(final ProfessorDto professor) {           
-            log.info("Novo professor cadastrado {}", professor);
+    public Response saveProfessor(final ProfessorDto professor) {
+        log.info("Saving professor - {}", professor);
             return Response
                     .status(Response.Status.CREATED)
                     .build();
-        }
-    
+    }
 
     @PUT
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response AtualizaProfessor(@PathParam("id") int id, ProfessorDto professorDto) {
-        log.info("Atualizando professor {}", id);
-            //professor.put(id, professorDto);
-            return Response
-                    .ok(professorDto)
-                    .status(Response.Status.OK)
-                    .build();
-        }
+    public Response updateProfessor(@PathParam("id") int id, ProfessorDto professor) {
+        log.info("Updating professor id - {}", id);
+        return Response
+                .ok(professor)
+                .build();
+    }
 
     @DELETE
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response removeProfessor(@PathParam("id") int id) {
-        log.info("Removendo professor {}", id);
-            //alunos.remove(id);
-            return Response
-                    .status(Response.Status.NO_CONTENT)
-                    .build();
-        }
+        log.info("Deleting professor id - {}", id);
+        return Response
+                .status(Response.Status.NO_CONTENT)
+                .build();
+    }
     }
