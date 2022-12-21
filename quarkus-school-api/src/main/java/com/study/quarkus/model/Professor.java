@@ -1,8 +1,15 @@
 package com.study.quarkus;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Example JPA entity.
@@ -22,26 +29,20 @@ import javax.persistence.Id;
  * }
  * }
  */
+
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class MyEntity {
-    private Long id;
-    private String field;
+@Table(name="PROFESSORES")
+public class Professor extends PanacheEntityBase{
 
     @Id
-    @GeneratedValue
-    public Long getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "professor_id")
+    private Integer id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
+    @Column(name = "professor_name", nullable = false)
+    private String name;
 }
