@@ -1,8 +1,22 @@
 package main.java.com.study.quarkus.service;
 
-import com.study.quarkus.Professor;
 
+import javax.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import javax.transaction.Transactional;
+import java.util.Optional;
+
+import main.java.com.study.quarkus.model.Professor;
+import main.java.com.study.quarkus.repository.ProfessorRepository;
 import main.java.com.study.quarkus.dto.ProfessorRequest;
+import main.java.com.study.quarkus.dto.ProfessorResponse;
+import main.java.com.study.quarkus.mapper.ProfessorMapper;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 @ApplicationScoped
 @Slf4j
@@ -10,19 +24,21 @@ import main.java.com.study.quarkus.dto.ProfessorRequest;
 public class ProfessorService {
     
     private final ProfessorMapper mapper;
+    private final ProfessorRepository repository;
 
     private static final Logger log = LoggerFactory.getLogger(ProfessorService.class);
 
+    //substituir Professor.metodoDeBAnco por repository
     public List<ProfessorResponse> retornaTodos(){
         log.info("Listando professores...");
-        final List<Professor> listaDeProfessores = Professor.listAll();
+        final List<Professor> listaDeProfessores = repository.listAll();
         return mapper.toResponse(listaDeProfessores);
     }
 
     public ProfessorResponse buscaPorId(int id){
         log.info("Buscando professor id--{}", id);
 
-        Professor professor = Professor.findById(id);
+        Professor professor = repository.findById(id);
         return mapper.toResponse(professor);
     }
 
@@ -33,10 +49,10 @@ public class ProfessorService {
 
         Professor entity = 
                 Professor.builder()
-                .name(professorRequest.getNome())
+                .name(professorRequest.getName())
                 .build();
 
-        entity.persistAndFlush();
+        repository.persistAndFlush(entity);
 
         return mapper.toResponse(entity);
 
@@ -47,12 +63,12 @@ public class ProfessorService {
 
         log.info("Atualizando professor id - {}, data - {}", id, professorRequest);
 
-        Optional<Professor> professor = Professor.findByIdOptional(id);
+        Optional<Professor> professor = repository.findByIdOptional(id);
 
         if (professor.isPresent()) {
             var entity = professor.get();
             entity.setName(professorRequest.getName());
-            entity.persistAndFlush();
+            repository.persistAndFlush(entity);
             return mapper.toResponse(entity);
         }
 
@@ -62,6 +78,6 @@ public class ProfessorService {
     @Transactional
     public void removeProfessor(int id) {
         log.info("Deletando professor id - {}", id);
-        Professor.findByIdOptional(id).ifPresent(PanacheEntityBase::delete);
+        repository.findByIdOptional(id).ifPresent(repository::delete);
     }
 }

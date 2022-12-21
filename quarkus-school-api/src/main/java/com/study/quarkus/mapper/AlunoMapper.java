@@ -1,42 +1,44 @@
 package main.java.com.study.quarkus.mapper;
 
-import main.java.com.study.quarkus.dto.ProfessorRequest;
-import main.java.com.study.quarkus.dto.ProfessorResponse;
-import main.java.com.study.quarkus.model.Professor;
+import main.java.com.study.quarkus.dto.AlunoRequest;
+import main.java.com.study.quarkus.dto.AlunoResponse;
+import main.java.com.study.quarkus.model.Aluno;
 
-
+import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-@ApplicationScoped
-public class ProfessorMapper {
 
-    public List<ProfessorResponse> toResponse(List<Professor> listaDeProfessores) {
-        if (Objects.isNull(listaDeProfessores))
+@ApplicationScoped
+public class AlunoMapper {
+    
+    public List<AlunoResponse> toResponse(List<Aluno> listaDeAlunos) {
+        if (Objects.isNull(listaDeAlunos))
             return new ArrayList<>();
 
-        return listaDeProfessores.stream()
+        return listaDeAlunos.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public Professor toEntity(ProfessorRequest request) {
+
+    public Aluno toEntity(AlunoRequest request) {
         if (Objects.isNull(request)) {
             return null;
         } else {
-            return Professor.builder()
+            return Aluno.builder()
                     .name(request.getName())
                     .build();
         }
     }
 
-    public ProfessorResponse toResponse(Professor entity) {
+    public AlunoResponse toResponse(Aluno entity) {
 
         //novo tipo de validação
         Objects.requireNonNull(entity, "Entidade não podde ser nula");
 
-        return ProfessorResponse.builder()
+        return AlunoResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();

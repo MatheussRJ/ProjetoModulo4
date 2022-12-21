@@ -13,9 +13,13 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.study.quarkus.service.ProfessorService;
 
-@slf4j
+import main.java.com.study.quarkus.service.ProfessorService;
+import main.java.com.study.quarkus.dto.ProfessorRequest;
+import main.java.com.study.quarkus.mapper.ProfessorMapper;
+
+
+@Slf4j
 @Path("/professor")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
