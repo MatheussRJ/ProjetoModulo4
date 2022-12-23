@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotBlank;
 
 
 /**
@@ -44,6 +45,8 @@ public class Aluno{
     @Column(name = "aluno_id")
     private Integer id;
 
+    @Size(min=2, message="Tamanho do nome não pode ser menor que 2")
+    @NotBlank (message = "Nome não pode ser nulo")
     @Column(name = "aluno_name", nullable = false)
     private String name;
 

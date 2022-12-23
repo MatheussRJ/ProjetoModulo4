@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  * Example JPA entity.
  * <p>
@@ -43,6 +46,8 @@ public class Professor{
     @Column(name = "professor_id")
     private Integer id;
 
+    @Size(min=2, message="Tamanho do nome não pode ser menor que 2")
+    @NotBlank (message = "Nome não pode ser nulo")
     @Column(name = "professor_name", nullable = false)
     private String name;
 }

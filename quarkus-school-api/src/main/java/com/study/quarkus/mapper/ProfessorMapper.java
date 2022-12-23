@@ -6,7 +6,8 @@ import main.java.com.study.quarkus.model.Professor;
 
 
 import java.util.ArrayList;
-
+import javax.enterprise.context.ApplicationScoped;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 @ApplicationScoped

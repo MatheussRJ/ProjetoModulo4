@@ -6,9 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import main.java.com.study.quarkus.exception.NotAllowedNameException;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import javax.transaction.Transactional;
 import java.util.Optional;
+import javax.validation.Valid;
 
 import main.java.com.study.quarkus.model.Professor;
 import main.java.com.study.quarkus.repository.ProfessorRepository;
@@ -42,10 +45,18 @@ public class ProfessorService {
         return mapper.toResponse(professor);
     }
 
+    //colocar anotação @Valid nas classes q implementam as validações
     @Transactional
-    public ProfessorResponse salvar(ProfessorRequest professorRequest){
+    public ProfessorResponse salvar(@Valid ProfessorRequest professorRequest){
+
+        Objects.requireNonNull(professorRequest, "Requisição não pode ser nula");
 
         log.info("Salvando professor - {}", professorRequest);
+
+
+        if (professorRequest.getName().equals("TESTE")) {
+            throw new NotAllowedNameException("O nome TESTE não é permitido");
+        }
 
         Professor entity = 
                 Professor.builder()
@@ -59,11 +70,15 @@ public class ProfessorService {
     }
 
     @Transactional
-    public ProfessorResponse atualiza(int id, ProfessorRequest professorRequest) {
+    public ProfessorResponse atualiza(int id,@Valid ProfessorRequest professorRequest) {
+
+        Objects.requireNonNull(professorRequest, "Requisição não pode ser nula");
 
         log.info("Atualizando professor id - {}, data - {}", id, professorRequest);
 
         Optional<Professor> professor = repository.findByIdOptional(id);
+
+        professor.orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
 
         if (professor.isPresent()) {
             var entity = professor.get();
