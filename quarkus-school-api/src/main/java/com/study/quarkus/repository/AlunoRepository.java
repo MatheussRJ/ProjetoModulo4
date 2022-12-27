@@ -1,4 +1,5 @@
 package main.java.com.study.quarkus.repository;
+
 import javax.enterprise.context.ApplicationScoped;
 import main.java.com.study.quarkus.model.Aluno;
 
