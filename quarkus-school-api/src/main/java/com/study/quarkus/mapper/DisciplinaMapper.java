@@ -2,6 +2,7 @@ package main.java.com.study.quarkus.mapper;
 
 import main.java.com.study.quarkus.dto.DisciplinaRequest;
 import main.java.com.study.quarkus.dto.DisciplinaResponse;
+import main.java.com.study.quarkus.dto.TitularResponse;
 import main.java.com.study.quarkus.model.Disciplina;
 import main.java.com.study.quarkus.model.Professor;
 

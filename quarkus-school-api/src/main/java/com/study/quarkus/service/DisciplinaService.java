@@ -10,6 +10,8 @@ import main.java.com.study.quarkus.repository.DisciplinaRepository;
 import main.java.com.study.quarkus.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityNotFoundException;
@@ -22,7 +24,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class DisciplinaService {
-    
+
     private final DisciplinaMapper mapper;
     private final DisciplinaRepository repository;
     private final ProfessorRepository professorRepository;
@@ -32,7 +34,7 @@ public class DisciplinaService {
     public List<DisciplinaResponse> retornaTodos() {
         log.info("Listando disciplinas...");
         final var listaDeDisciplinas = repository.listAll();
-        return  mapper.toResponse(listaDeDisciplinas);
+        return mapper.toResponse(listaDeDisciplinas);
     }
 
     @Transactional
@@ -42,10 +44,9 @@ public class DisciplinaService {
 
         log.info("Salvando disciplina - {}", request);
 
-        Disciplina entity =
-                Disciplina.builder()
-                        .name(disciplinaRequest.getName())
-                        .build();
+        Disciplina entity = Disciplina.builder()
+                .name(disciplinaRequest.getName())
+                .build();
 
         repository.persist(entity);
 
@@ -64,20 +65,22 @@ public class DisciplinaService {
 
         log.info("Atualizando titular disciplina-id: {}, professor-id: {}", idDisciplina, idProfessor);
 
-        //buscando entidades
+        // buscando entidades
         var disciplina = repository.findById(idDisciplina);
         var professor = professorRepository.findById(idProfessor);
 
-        //validando se não é nulo
-        if (Objects.isNull(disciplina)) throw new EntityNotFoundException("Disciplina não encontrada");
-        if (Objects.isNull(professor)) throw new EntityNotFoundException("Professor não encontrado");
+        // validando se não é nulo
+        if (Objects.isNull(disciplina))
+            throw new EntityNotFoundException("Disciplina não encontrada");
+        if (Objects.isNull(professor))
+            throw new EntityNotFoundException("Professor não encontrado");
 
-        //verificando se Professor não tem Disciplina
-        if (repository.contarTitularidadePorProfessor (professor) > 0) {
+        // verificando se Professor não tem Disciplina
+        if (repository.contarTitularidadePorProfessor(professor) > 0) {
             throw new InvalidStateException("Professor deve ser titular de pelo menos uma disciplina");
         }
 
-        //Atualiza
+        // Atualiza
         disciplina.setTitular(professor);
         repository.persist(disciplina);
 
@@ -89,11 +92,14 @@ public class DisciplinaService {
         log.info("Busca disciplina por professor-id: {}", idProfessor);
 
         var professor = professorRepository.findById(idProfessor);
-        if (Objects.isNull(professor)) throw new EntityNotFoundException("Professor não encontrado");
+        if (Objects.isNull(professor))
+            throw new EntityNotFoundException("Professor não encontrado");
 
         var query = repository.find("titular", professor);
-        if (query.count() == 0) throw new EntityNotFoundException("Disciplina não encontrada");
-        if (query.count() > 1) throw new InvalidStateException("Professor deve ter pelo menos uma disciplina como titular");
+        if (query.count() == 0)
+            throw new EntityNotFoundException("Disciplina não encontrada");
+        if (query.count() > 1)
+            throw new InvalidStateException("Professor deve ter pelo menos uma disciplina como titular");
 
         var disciplina = query.singleResult();
 
